@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+
+
+
+
+
+
+<!--- JL: Gestor de campañas - Banners --->
+
+<cfif Find( "jlmarting", CGI.http_user_agent )>
+<div style="">
+  <cfoutput>
+      <tr><td colspan="5" style=" width:100%; padding:10px; padding-top:6px; padding-bottom:6px;">
+      <cfif isDefined("qryCampaign.categoryId") >
+      Banners de campaña #qryCampaign.categoryId#
+      <cfelse>
+      Banners de campaña: nueva campaña        
+    </cfif>
+  </td></tr>
+      <tr>
+        <td colspan="5" style=" width:100%; padding:10px; padding-top:6px; padding-bottom:6px;">
+          <!--- enctype="multipart/form-data" ??? --->
+
+          <ul id="cbanner_list" style="list-style:none">
+              <!--- Banner list: these list items will be dinamically created --->
+              <!--- end banner list--->
+         
+          </ul>
+					<ul style="list-style:none;padding-top:30px">              
+              <li>               
+                <button id="add2BannerList">+</button>
+                <button>Delete selected</button>
+                <button id="testCB"> [[Testing Campaign Banners]] </button>
+
+              </li>
+          </ul>
+          
+        </td>
+
+      </tr>               
+      <tr><td colspan="5" style=" width:100%; padding:10px; padding-top:6px; padding-bottom:6px;">
+       
+        <!--- 
+         <cfoutput><b>#qryCampaign.categoryId#</b></cfoutput>
+        //query de selección de banners
+        select * 
+        from mmBannersCampaign
+        where bannerCampaignIs = #qryCampaign.categoryId
+
+     
+      --->
+
+    </td></tr>               
+  </cfoutput>
+</div>
+</cfif>
+
+<!--- JL end --->
+
+
+
+
+
+
+
+
+<!--- jlmarting: campaign's banners scripts for testing purposes --->
+<script>
+//Agregar banner a la lista de uploads
+
+/* Creamos elementos del form dinámicamente */
+
+var createInputBanner = function(){
+
+	var bannerInputSrc = document.createElement('input');
+	var bannerInputPos = document.createElement('input');
+	var bannerInputAnalytics = document.createElement('input');
+	var bannerLblSrc = document.createElement('label');
+	var bannerLblPos = document.createElement('label');
+	var bannerLblAnalytics = document.createElement('label');
+	var nodeLi = document.createElement('li');
+	var delButton = document.createElement('button')
+
+	bannerInputSrc.setAttribute('name','banner_src');
+	bannerInputSrc.setAttribute('type','file');
+	bannerInputPos.setAttribute('name','banner_pos');
+	bannerInputAnalytics.setAttribute('name','banner_analytics');
+
+	bannerLblPos.appendChild(document.createTextNode('Position: '));
+	bannerLblAnalytics.appendChild(document.createTextNode('Analytics: '))
+
+	bannerLblSrc.setAttribute('for','banner_src');
+	bannerLblPos.setAttribute('for','banner_pos');
+	bannerLblAnalytics.setAttribute('for','banner_analytics');
+
+	nodeLi.appendChild(bannerLblSrc);
+	nodeLi.appendChild(bannerInputSrc);
+	nodeLi.appendChild(bannerLblPos);
+	nodeLi.appendChild(bannerInputPos);
+	nodeLi.appendChild(bannerLblAnalytics);
+	nodeLi.appendChild(bannerInputAnalytics);
+
+	//bannerInputSrc.setAttribute('value', srcValue);
+
+	var bannerDelButton = document.createElement('button');
+	bannerDelButton.appendChild(document.createTextNode(' - '));
+
+	bannerDelButton.addEventListener('click',function(){
+		nodeLi.parentNode.removeChild(nodeLi);
+	});
+
+	nodeLi.appendChild(bannerDelButton);
+
+	return nodeLi;
+
+}
+/* fin de elementos del form */
+
+
+
+var add2BannerList = document.getElementById('add2BannerList');   // botón
+var cbanner_list = document.getElementById('cbanner_list');       // ul con inputs de banners
+//var newBanner = document.getElementsByName('new_banner')[0];      // input field (imagen)
+
+add2BannerList.addEventListener('click',function(){  
+   cbanner_list.appendChild(createInputBanner());
+});
+
+
+var testCB = document.getElementById('testCB');
+
+testCB.addEventListener('click', function(){
+  
+  var bannerValues = document.getElements("[name^='banner_']");
+  var result = "";
+
+  for (var i=0;i<bannerValues.length;i++){
+    result += '\n' + i + '  -  ' + bannerValues[i].name + ' => ' + bannerValues[i].value;  
+  }
+  console.log(result);
+  
+      /*banner_src_0
+      banner_pos_0
+      banner_date_start_0
+      banner_date_end_0
+      banner_max_hits_0
+      banner_current_hits_0
+      banner_select*/
+  //console.log('jlmarting ' + bannerValues);
+
+});
+
+</script>
+
+<!---  --->
+
+
+</body>
+</html>
